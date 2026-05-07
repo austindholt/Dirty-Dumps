@@ -29,9 +29,7 @@
   </main>
   <footer><div class="footer-inner"><div>© <span id="year"></span> Dirty Dumps Hauling Co. LLC • Boise, Idaho</div><div class="socials"><a href="https://www.instagram.com/dirtydumpshaulingco/?hl=en" aria-label="Dirty Dumps Instagram">Instagram</a><a href="https://www.facebook.com/profile.php?id=61588967134368" aria-label="Dirty Dumps Facebook">Facebook</a><a href="https://nextdoor.com/page/dirty-dumps-hauling-co?share_platform=10&utm_campaign=1778139532807&share_action_id=d45abfc2-8a3a-4b5c-892f-e46fa3151ce6" aria-label="Dirty Dumps Nextdoor">Nextdoor</a></div></div></footer>
   <script>
-    const BUSINESS_EMAIL = "dirtydumpshaulingco@gmail.com";
     document.getElementById("year").textContent = new Date().getFullYear();
-    document.getElementById("quoteForm").addEventListener("submit", function(event){event.preventDefault();const data=new FormData(event.currentTarget);const lines=["Dirty Dumps Quote Request","",`Name: ${data.get("name")||""}`,`Contact: ${data.get("contact")||""}`,`City/Area: ${data.get("city")||""}`,`Preferred timing: ${data.get("timing")||""}`,"","What needs hauled:",`${data.get("items")||""}`,"",`Stairs/heavy items: ${data.get("stairs")||""}`,`Anything hazardous: ${data.get("hazardous")||""}`,`Photo note: ${data.get("photos")||""}`,"","Extra notes:",`${data.get("notes")||""}`,"","Please reply with photos if they were not already provided."];const subject=encodeURIComponent("Dirty Dumps Quote Request");const body=encodeURIComponent(lines.join("\n"));window.location.href=`mailto:${BUSINESS_EMAIL}?subject=${subject}&body=${body}`});
   </script>
 </body>
 </html>
