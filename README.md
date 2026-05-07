@@ -20,14 +20,11 @@ Simple static landing page for Dirty Dumps Hauling Co. LLC.
 
 ## Quote form note
 
-The quote form is intentionally GitHub Pages-friendly. It opens the visitor's email app with the quote request filled in.
+The quote form submits directly to Formspree:
 
-For direct photo uploads later, replace this with:
-- embedded Google Form,
-- Formspree,
-- Netlify Forms,
-- Airtable form, or
-- a custom backend.
+`https://formspree.io/f/xbdwkbjv`
+
+It supports standard form fields and a photo upload field. Test a submission after deploying and confirm it arrives in the Dirty Dumps/Formspree inbox.
 
 ## Deploy on GitHub Pages
 
