@@ -10,6 +10,7 @@ Simple static GitHub Pages landing page for Dirty Dumps Hauling Co. LLC.
 - `sitemap.xml` - canonical page URL for search engines
 - `.nojekyll` - keeps GitHub Pages serving static files directly
 - `assets/logo.png` - main logo
+- `assets/logo-display.png` - optimized display logo used on the page
 - `assets/social-share.png` - Open Graph/social sharing preview image
 - `assets/promo-square.png` - square promotional graphic
 - `assets/cover-wide.png` - wide banner / cover graphic
