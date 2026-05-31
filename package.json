@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "seo:audit": "node scripts/seo-audit.js"
+    "seo:audit": "node scripts/seo-audit.js",
+    "audit:report": "node scripts/live-audit-report.js"
   },
   "devDependencies": {}
 }

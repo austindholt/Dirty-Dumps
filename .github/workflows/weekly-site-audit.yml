@@ -1,0 +1,79 @@
+name: Weekly Website SEO & Performance Audit
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "37 15 * * 1"
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  site-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run static SEO audit
+        run: npm run seo:audit
+
+      - name: Run Lighthouse against live site
+        continue-on-error: true
+        run: |
+          mkdir -p reports
+          npx -y lighthouse@latest https://dirtydumpshaulingco.com \
+            --quiet \
+            --chrome-flags="--headless --no-sandbox" \
+            --output=json \
+            --output-path=reports/lighthouse.json
+
+      - name: Build weekly report
+        run: node scripts/live-audit-report.js
+
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-site-audit
+          path: |
+            reports/weekly-site-audit.md
+            reports/seo-audit.md
+            reports/lighthouse.json
+            reports/audit-summary.json
+
+      - name: Create or update audit issue when thresholds fail
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs");
+            const title = "Weekly Website SEO & Performance Audit";
+            const summaryPath = "reports/audit-summary.json";
+            const reportPath = "reports/weekly-site-audit.md";
+            const summary = JSON.parse(fs.readFileSync(summaryPath, "utf8"));
+            if (!summary.issueNeeded) {
+              core.info("Scores are above thresholds; no issue needed.");
+              return;
+            }
+
+            const report = fs.readFileSync(reportPath, "utf8");
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const body = `${report}\n\nWorkflow run: ${runUrl}\n\nThis issue is reused by the weekly audit workflow to avoid duplicates.`;
+            const { owner, repo } = context.repo;
+            const existing = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              state: "open",
+              per_page: 100
+            });
+            const issue = existing.data.find((item) => item.title === title);
+            if (issue) {
+              await github.rest.issues.update({ owner, repo, issue_number: issue.number, body });
+            } else {
+              await github.rest.issues.create({ owner, repo, title, body });
+            }

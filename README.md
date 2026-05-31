@@ -11,8 +11,9 @@ Simple static GitHub Pages landing page for Dirty Dumps Hauling Co. LLC.
 - `robots.txt` - basic crawler guidance
 - `sitemap.xml` - canonical page URL for search engines
 - `.nojekyll` - keeps GitHub Pages serving static files directly
-- `.github/workflows/weekly-seo-audit.yml` - weekly static SEO audit report
+- `.github/workflows/weekly-site-audit.yml` - weekly live-site SEO and Lighthouse audit
 - `scripts/seo-audit.js` - no-dependency local SEO/content audit script
+- `scripts/live-audit-report.js` - combines Lighthouse and static audit output into a weekly report
 - `assets/site.css` - shared styles for service and quote pages
 - `assets/quote.js` - shared Formspree quote form confirmation/error handling
 - `assets/logo.png` - main logo
@@ -55,7 +56,20 @@ The audit writes `reports/seo-audit.md` and checks for common static-site issues
 - Weak local service-area mentions
 - Invalid JSON-LD blocks
 
-GitHub Actions also runs the same audit weekly on Mondays at 15:00 UTC and uploads the report as an artifact. The workflow does not publish content changes automatically.
+GitHub Actions runs a weekly live-site audit on Mondays at 15:37 UTC and uploads a markdown report artifact. The workflow:
+
+- Runs the static SEO/content audit.
+- Runs Lighthouse against `https://dirtydumpshaulingco.com`.
+- Checks performance, accessibility, best practices, and SEO targets.
+- Creates or updates one issue titled `Weekly Website SEO & Performance Audit` if scores fall below target.
+- Does not publish content changes automatically.
+
+Manual workflow run:
+
+1. Open the repository on GitHub.
+2. Go to Actions.
+3. Select `Weekly Website SEO & Performance Audit`.
+4. Click `Run workflow`.
 
 Before adding new public business details, confirm them first:
 
@@ -72,6 +86,13 @@ Before adding new public business details, confirm them first:
 - Link related services together.
 - Add the new URL to `sitemap.xml`.
 - Avoid duplicate city pages that only swap location names.
+
+## Updating business info
+
+- Public email and social links live in the homepage, quote page, service pages, and structured data.
+- Service areas are listed in `index.html`, `service-areas/index.html`, service pages, and `sitemap.xml`.
+- SEO metadata lives in each page's `<head>`.
+- Formspree endpoint is used in `index.html` and `quote/index.html`.
 
 ## Deploy on GitHub Pages
 
